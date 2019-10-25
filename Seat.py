@@ -102,7 +102,7 @@ class Seat():
 
         gcn = str(gcn)
 
-        if len(gcn) < 1:
+        if len(gcn) != 4:
             return -1
 
         if gcn[1] == 'A' or gcn[1] == 'a':
