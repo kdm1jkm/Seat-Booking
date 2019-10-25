@@ -1,6 +1,7 @@
 from Seat import Seat
 import os
 from printAll import print_all
+import time
 
 superuser_password = "__"
 
@@ -92,12 +93,33 @@ if __name__ == "__main__":
                 seat.del_student(num, n)
         
         elif _input == "s" or _input == "S":
-            seat.export_to_csv()
+            if input("관리자 패스워드: ") == superuser_password:
+                seat.export_to_csv()
         
         elif _input == "r" or _input == "R":
             if input("관리자 패스워드: ") == superuser_password:
                 random = input("몇 명까지 추첨할까요: ")
-                seat.cut_random(int(random))
+                out = seat.cut_random(int(random))
+
+                # print(out)
+                # os.system("pause>nul")
+
+                if not os.path.exists("cutPeople"):
+                    os.mkdir("cutPeople")
+
+                filename = time.strftime("cutPeople\\%Y-%m-%d_%H%M%S.csv", time.localtime(time.time()))
+
+                with open(filename, 'w') as f:
+                    f.write("이름,층,번호,교시\n")
+                    for i in out:
+                        name = i[0]
+                        ln = "%d번" % (i[1] % 100)
+                        lf = (i[1] - (i[1] % 100)) / 100
+                        if lf == 4: lf = "남자신관"
+                        elif lf == 5: lf = "여자신관"
+                        else: lf = "%d층" % lf
+                        str = "%s,%s,%s,%s\n" % (name, lf, ln, "%d교시" % i[3])
+                        f.write(str)
         
         elif _input == "a" or _input == "A":
             if input("관리자 패스워드: ") == superuser_password:

@@ -101,6 +101,10 @@ class Seat():
             return -1
 
         gcn = str(gcn)
+
+        if len(gcn) < 1:
+            return -1
+
         if gcn[1] == 'A' or gcn[1] == 'a':
             gcn = "30%s" % gcn[2:]
         elif gcn[1] == 'B' or gcn[1] == 'b':
@@ -119,12 +123,22 @@ class Seat():
         return -1
 
     def cut_random(self, num):
+        cutPeople = []
+        j = 0
         for i in range(self.max_num):
             while len(self.get_all_gcn(i)) > num:
                 p = random.randint(0, len(self.__gcn))
+
+                cutPeople.append(self.get_student(i, p))
+                cutPeople[j].append(i + 1)
+
                 self.__name[i].pop(p)
                 self.__gcn[i].pop(p)
                 self.__lfn[i].pop(p)
+
+                j += 1
+
+        return cutPeople
 
     def save_data(self, filename="seat.dat"):
         with open(filename, 'wb') as f:
